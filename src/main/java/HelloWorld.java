@@ -28,7 +28,7 @@ public class HelloWorld {
                             + "\t" + result.getString("longitude")
                             + "\t" + result.getString("latitude")
                             + "\t" + result.getString("timezone")
-                            + "\n");
+                            + "<br>");
                 }
             } else {
                 System.out.println("Failed to make connection!");
@@ -40,7 +40,11 @@ public class HelloWorld {
         }
 
 
-        get("/hello", (req, res) -> airports.getAirports());
+        get("/hello", (req, res) -> "Алена, привет!"
+                +"<br>"
+                +"А вот и таблица!"
+                +"<br>"
+                + airports.getAirports());
 
 
     }
