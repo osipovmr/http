@@ -15,8 +15,8 @@ public class LogIn {
         try (Connection conn = DriverManager.getConnection(url, login, password)) {
             if (conn != null) {
                 System.out.println("Connected to the database!");
-                result = statement.executeQuery(query.query());
                 statement = conn.createStatement();
+                result = statement.executeQuery(query.query());
                 while (result.next()) {
                     System.out.println(result.getString("airport_code") + "\t " + result.getString("airport_name")
                             + "\t" + result.getString("city")

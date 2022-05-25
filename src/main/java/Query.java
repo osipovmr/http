@@ -1,6 +1,7 @@
 public class Query {
     public String query() {
-        return "select * from bookings.airports";
+        String query = "select * from bookings.airports";
+        return query;
     }
 
     ;
