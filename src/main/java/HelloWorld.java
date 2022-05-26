@@ -1,36 +1,26 @@
-import java.sql.*;
-
 import static spark.Spark.*;
 
-public class HelloWorld {
+import java.sql.*;
 
+
+public class HelloWorld {
+    public static String url = "jdbc:postgresql://c-c9qkc196nr3nge59qclr.rw.mdb.yandexcloud.net:6432/students-project";
+    public static String login = "students-project";
+    public static String password = "kd5HdsI2fcidKsqC";
+    public static Statement statement = null;
+    public static Query query = new Query();
+    public static Airports airports = new Airports();
+    public static String check = null;
+    static ResultSet result;
 
     public static void main(String[] args) {
-        LogIn logIn = new LogIn();
-        Airports airports = new Airports();
-        Query query = new Query();
-        get("/hello", (req, res) -> logIn.connection()
-                + "<br>"
-                + query.query()
-                + "<br>"
-                + airports.getAirports());
-
-        /*
-           Airports airports = new Airports();
-        Statement statement = null;
-        String query = "select * from bookings.airports";
-        ResultSet result;
-        try (Connection conn = DriverManager.getConnection(url, login, password)) {
+        try {
+            Connection conn = DriverManager.getConnection(url, login, password);
             if (conn != null) {
-                System.out.println("Connected to the database!");
                 statement = conn.createStatement();
-                result = statement.executeQuery(query);
+                result = statement.executeQuery(query.query());
+                check = "Connected to the database!";
                 while (result.next()) {
-                    System.out.println(result.getString("airport_code") + "\t " + result.getString("airport_name")
-                            + "\t" + result.getString("city")
-                            + "\t" + result.getString("longitude")
-                            + "\t" + result.getString("latitude")
-                            + "\t" + result.getString("timezone"));
                     airports.add(result.getString("airport_code") + "\t " + result.getString("airport_name")
                             + "\t" + result.getString("city")
                             + "\t" + result.getString("longitude")
@@ -39,21 +29,21 @@ public class HelloWorld {
                             + "<br>");
                 }
             } else {
-                System.out.println("Failed to make connection!");
+                check = "Failed to make connection!";
             }
+
         } catch (SQLException e) {
-            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            check = String.valueOf(System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage()));
         } catch (Exception e) {
             e.printStackTrace();
+            check = "Ошибка SQL!";
         }
-
-
-        get("/hello", (req, res) -> "Алена, привет!"
-                + "<br>"
-                + "А вот и таблица!"
-                + "<br>"
-                + airports.getAirports()); */
-
-
+        System.out.println(check);
+        for (int i = 0; i < airports.list.size(); i++) {
+            System.out.println(airports.list.get(i));
+        }
+        get("/hello", (req, res) -> airports.getAirports());
     }
+
 }
+
