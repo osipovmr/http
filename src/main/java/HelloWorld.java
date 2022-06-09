@@ -2,11 +2,7 @@ import static spark.Spark.*;
 
 import java.sql.*;
 
-
 public class HelloWorld {
-    public static String url = "jdbc:postgresql://c-c9qkc196nr3nge59qclr.rw.mdb.yandexcloud.net:6432/students-project";
-    public static String login = "students-project";
-    public static String password = "kd5HdsI2fcidKsqC";
     public static Statement statement = null;
     public static Airports airports = new Airports();
     public static Tickets tickets = new Tickets();
@@ -52,7 +48,7 @@ public class HelloWorld {
 
     public static String connection() {
         try {
-            Connection conn = DriverManager.getConnection(url, login, password);
+            Connection conn = DataSourse.getConnection();
             if (conn != null) {
                 statement = conn.createStatement();
                 check = "Connected to the database!";
@@ -67,7 +63,6 @@ public class HelloWorld {
         }
         return check;
     }
-
     public static void airport() {
         try {
             resultAirport = statement.executeQuery(queryAirport);
@@ -124,10 +119,6 @@ public class HelloWorld {
             e.printStackTrace();
         }
     }
-
-
-
-
 
     public static void main(String[] args) {
         System.out.println(connection());

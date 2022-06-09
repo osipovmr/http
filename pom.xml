@@ -49,6 +49,13 @@
             <artifactId>postgresql</artifactId>
             <version>42.2.5</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/io.github.qsy7.java.dependencies/hikari-jdbc-connection-pool -->
+        <dependency>
+            <groupId>io.github.qsy7.java.dependencies</groupId>
+            <artifactId>hikari-jdbc-connection-pool</artifactId>
+            <version>0.1.2</version>
+            <type>pom</type>
+        </dependency>
     </dependencies>
     <properties>
         <maven.compiler.source>18</maven.compiler.source>
