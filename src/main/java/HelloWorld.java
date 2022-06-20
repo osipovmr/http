@@ -3,15 +3,17 @@ import static spark.Spark.*;
 import java.sql.*;
 
 public class HelloWorld {
+    //закидываем все классы
     public static Statement statement = null;
     public static Airports airports = new Airports();
     public static Tickets tickets = new Tickets();
     public static Codes codes = new Codes();
+    public static Container container = new Container();
     public static String check = null;
     static ResultSet resultAirport;
     static ResultSet resultTicket;
     static ResultSet resultCode;
-    public static String queryAirport = "select * from bookings.airports";
+    public static String queryAirport = "select * from bookings.airports"; // вызов всей таблицы
     //1. для конкретного номера билета (ticket_no) узнать имя пассажира, тариф, статус, город вылета.
     public static String queryTicket = "select tickets.ticket_no, "
             + "passenger_name, "
@@ -63,6 +65,7 @@ public class HelloWorld {
         }
         return check;
     }
+
     public static void airport() {
         try {
             resultAirport = statement.executeQuery(queryAirport);
@@ -74,6 +77,13 @@ public class HelloWorld {
                         + "\t" + resultAirport.getString("latitude")
                         + "\t" + resultAirport.getString("timezone")
                         + "<br>");
+                String a = resultAirport.getString("airport_code");
+                String b = resultAirport.getString("airport_name")
+                        + "\t" + resultAirport.getString("city")
+                        + "\t" + resultAirport.getString("longitude")
+                        + "\t" + resultAirport.getString("latitude")
+                        + "\t" + resultAirport.getString("timezone");
+                container.setJedis(a,b);
             }
             System.out.println("База airport собрана!");
         } catch (SQLException e) {
@@ -93,6 +103,12 @@ public class HelloWorld {
                         + "\t" + resultTicket.getString("status")
                         + "\t" + resultTicket.getString("city")
                         + "<br>");
+                String a = resultTicket.getString("ticket_no");
+                String b = resultTicket.getString("passenger_name")
+                        + "\t" + resultTicket.getString("fare_conditions")
+                        + "\t" + resultTicket.getString("status")
+                        + "\t" + resultTicket.getString("city");
+                container.setJedis(a,b);
             }
             System.out.println("База ticket собрана!");
         } catch (SQLException e) {
@@ -106,11 +122,16 @@ public class HelloWorld {
         try {
             resultCode = statement.executeQuery(queryCode);
             while (resultCode.next()) {
-                codes.add( resultCode.getString("airport_code")
-                        + "\t " +  resultCode.getString("Кол-во вылетевших рейсов")
-                        + "\t" +  resultCode.getString("Кол-во вылетевших пассажиров")
-                        + "\t" +  resultCode.getString("Средняя стоимость вылета")
+                codes.add(resultCode.getString("airport_code")
+                        + "\t " + resultCode.getString("Кол-во вылетевших рейсов")
+                        + "\t" + resultCode.getString("Кол-во вылетевших пассажиров")
+                        + "\t" + resultCode.getString("Средняя стоимость вылета")
                         + "<br>");
+                String a = resultCode.getString("airport_code");
+                String b = resultCode.getString("Кол-во вылетевших рейсов")
+                        + "\t" + resultCode.getString("Кол-во вылетевших пассажиров")
+                        + "\t" + resultCode.getString("Средняя стоимость вылета");
+                container.setJedis(a,b);
             }
             System.out.println("База code собрана!");
         } catch (SQLException e) {
@@ -122,6 +143,12 @@ public class HelloWorld {
 
     public static void main(String[] args) {
         System.out.println(connection());
+        System.out.println(container.redisTester());
+        container.setJedis("Privet", "Hello"); //проверка
+        System.out.println(container.getJedis("Privet")); //проверка
+        System.out.println(container.getJedis("NOZ"));
+        System.out.println(container.getJedis("0005432000883"));
+        System.out.println(container.getJedis("TOF"));
         airport();
         ticket();
         code();
