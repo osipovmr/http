@@ -9,6 +9,9 @@ public class HelloWorld {
     public static Tickets tickets = new Tickets();
     public static Codes codes = new Codes();
     public static Container container = new Container();
+    public static AirportInfo airportInfo = new AirportInfo();
+    public static TicketInfo ticketInfo = new TicketInfo();
+    public static CodeInfo codeInfo = new CodeInfo();
     public static String check = null;
     static ResultSet resultAirport;
     static ResultSet resultTicket;
@@ -70,20 +73,17 @@ public class HelloWorld {
         try {
             resultAirport = statement.executeQuery(queryAirport);
             while (resultAirport.next()) {
-                airports.add(resultAirport.getString("airport_code")
-                        + "\t " + resultAirport.getString("airport_name")
-                        + "\t" + resultAirport.getString("city")
-                        + "\t" + resultAirport.getString("longitude")
-                        + "\t" + resultAirport.getString("latitude")
-                        + "\t" + resultAirport.getString("timezone")
-                        + "<br>");
-                String a = resultAirport.getString("airport_code");
-                String b = resultAirport.getString("airport_name")
-                        + "\t" + resultAirport.getString("city")
-                        + "\t" + resultAirport.getString("longitude")
-                        + "\t" + resultAirport.getString("latitude")
-                        + "\t" + resultAirport.getString("timezone");
-                container.setJedis(a,b);
+                airportInfo.AirportsInfo(resultAirport.getString("airport_code"),
+                        resultAirport.getString("airport_name"),
+                        resultAirport.getString("city"),
+                        resultAirport.getString("longitude"),
+                        resultAirport.getString("latitude"),
+                        resultAirport.getString("timezone")
+                        );
+                airports.add(airportInfo.toString());
+                String key = resultAirport.getString("airport_code");
+                String value = airportInfo.toString();
+                container.setJedis(key, value);
             }
             System.out.println("База airport собрана!");
         } catch (SQLException e) {
@@ -97,18 +97,15 @@ public class HelloWorld {
         try {
             resultTicket = statement.executeQuery(queryTicket);
             while (resultTicket.next()) {
-                tickets.add(resultTicket.getString("ticket_no")
-                        + "\t " + resultTicket.getString("passenger_name")
-                        + "\t" + resultTicket.getString("fare_conditions")
-                        + "\t" + resultTicket.getString("status")
-                        + "\t" + resultTicket.getString("city")
-                        + "<br>");
-                String a = resultTicket.getString("ticket_no");
-                String b = resultTicket.getString("passenger_name")
-                        + "\t" + resultTicket.getString("fare_conditions")
-                        + "\t" + resultTicket.getString("status")
-                        + "\t" + resultTicket.getString("city");
-                container.setJedis(a,b);
+                ticketInfo.TicketInfo(resultTicket.getString("ticket_no"),
+                        resultTicket.getString("passenger_name"),
+                        resultTicket.getString("fare_conditions"),
+                        resultTicket.getString("status"),
+                        resultTicket.getString("city"));
+                tickets.add(ticketInfo.toString());
+                String key = resultTicket.getString("ticket_no");
+                String value = ticketInfo.toString();
+                container.setJedis(key,value);
             }
             System.out.println("База ticket собрана!");
         } catch (SQLException e) {
@@ -122,16 +119,14 @@ public class HelloWorld {
         try {
             resultCode = statement.executeQuery(queryCode);
             while (resultCode.next()) {
-                codes.add(resultCode.getString("airport_code")
-                        + "\t " + resultCode.getString("Кол-во вылетевших рейсов")
-                        + "\t" + resultCode.getString("Кол-во вылетевших пассажиров")
-                        + "\t" + resultCode.getString("Средняя стоимость вылета")
-                        + "<br>");
-                String a = resultCode.getString("airport_code");
-                String b = resultCode.getString("Кол-во вылетевших рейсов")
-                        + "\t" + resultCode.getString("Кол-во вылетевших пассажиров")
-                        + "\t" + resultCode.getString("Средняя стоимость вылета");
-                container.setJedis(a,b);
+                codeInfo.CodeInfo(resultCode.getString("airport_code"),
+                        resultCode.getString("Кол-во вылетевших рейсов"),
+                        resultCode.getString("Кол-во вылетевших пассажиров"),
+                        resultCode.getString("Средняя стоимость вылета"));
+                codes.add(codeInfo.toString());
+                String key = resultCode.getString("airport_code");
+                String value = codeInfo.toString();
+                container.setJedis(key,value);
             }
             System.out.println("База code собрана!");
         } catch (SQLException e) {
