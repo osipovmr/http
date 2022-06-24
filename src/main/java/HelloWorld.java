@@ -5,9 +5,6 @@ import java.sql.*;
 public class HelloWorld {
     //закидываем все классы
     public static Statement statement = null;
-    public static Airports airports = new Airports();
-    public static Tickets tickets = new Tickets();
-    public static Codes codes = new Codes();
     public static Container container = new Container();
     public static AirportInfo airportInfo = new AirportInfo();
     public static TicketInfo ticketInfo = new TicketInfo();
@@ -80,7 +77,7 @@ public class HelloWorld {
                         resultAirport.getString("latitude"),
                         resultAirport.getString("timezone")
                         );
-                airports.add(airportInfo.toString());
+                airportInfo.add(airportInfo.toString());
                 String key = resultAirport.getString("airport_code");
                 String value = airportInfo.toString();
                 container.setJedis(key, value);
@@ -102,7 +99,7 @@ public class HelloWorld {
                         resultTicket.getString("fare_conditions"),
                         resultTicket.getString("status"),
                         resultTicket.getString("city"));
-                tickets.add(ticketInfo.toString());
+                ticketInfo.add(ticketInfo.toString());
                 String key = resultTicket.getString("ticket_no");
                 String value = ticketInfo.toString();
                 container.setJedis(key,value);
@@ -123,7 +120,7 @@ public class HelloWorld {
                         resultCode.getString("Кол-во вылетевших рейсов"),
                         resultCode.getString("Кол-во вылетевших пассажиров"),
                         resultCode.getString("Средняя стоимость вылета"));
-                codes.add(codeInfo.toString());
+                codeInfo.add(codeInfo.toString());
                 String key = resultCode.getString("airport_code");
                 String value = codeInfo.toString();
                 container.setJedis(key,value);
@@ -148,19 +145,19 @@ public class HelloWorld {
         ticket();
         code();
 
-        for (int i = 0; i < airports.list.size(); i++) {
-            System.out.println(airports.list.get(i));
+        for (int i = 0; i < airportInfo.list.size(); i++) {
+            System.out.println(airportInfo.list.get(i));
         }
-        for (int i = 0; i < tickets.list.size(); i++) {
-            System.out.println(tickets.list.get(i));
+        for (int i = 0; i < ticketInfo.list.size(); i++) {
+            System.out.println(ticketInfo.list.get(i));
         }
-        for (int i = 0; i < codes.list.size(); i++) {
-            System.out.println(codes.list.get(i));
+        for (int i = 0; i < codeInfo.list.size(); i++) {
+            System.out.println(codeInfo.list.get(i));
         }
         get("/hello", (req, res) -> check);
-        get("/airport", (req, res) -> airports.getAirports());
-        get("/ticket", (req, res) -> tickets.getTicket());
-        get("/code", (req, res) -> codes.getCode());
+        get("/airport", (req, res) -> airportInfo.getAirports());
+        get("/ticket", (req, res) -> ticketInfo.getTicket());
+        get("/code", (req, res) -> codeInfo.getCode());
     }
 
 }

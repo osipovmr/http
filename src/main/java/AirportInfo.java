@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class AirportInfo {
     public String airportCode;
     public String airportName;
@@ -5,6 +7,14 @@ public class AirportInfo {
     public String longitude;
     public String latitude;
     public String timezone;
+    ArrayList<String> list = new ArrayList<>();
+
+    public void add(String text) {
+        list.add(text);
+    }
+    public ArrayList<String> getAirports() {
+        return list;
+    }
 
     public void AirportsInfo(String airportCode, String airportName, String city, String longitude, String latitude, String timezone) {
         this.airportCode = airportCode;

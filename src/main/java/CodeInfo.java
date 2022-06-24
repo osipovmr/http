@@ -1,9 +1,19 @@
+import java.util.ArrayList;
+
 public class CodeInfo {
 
     public String airportCode;
     public String flightsOut;
     public String passengersOut;
     public String averagePrice;
+    ArrayList<String> list = new ArrayList<>();
+
+    public void add(String text) {
+        list.add(text);
+    }
+    public ArrayList<String> getCode() {
+        return list;
+    }
 
     public void CodeInfo(String airportCode, String flightsOut, String passengersOut, String averagePrice) {
         this.airportCode = airportCode;
