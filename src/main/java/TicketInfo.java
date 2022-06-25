@@ -9,14 +9,6 @@ public class TicketInfo {
     public String city;
     ArrayList<String> list = new ArrayList<>();
 
-    public void add(String text) {
-        list.add(text);
-    }
-    public ArrayList<String> getTicket() {
-        return list;
-    }
-
-
     public void TicketInfo(String ticketNo, String passangerName, String fareConditions, String status, String city) {
         this.ticketNo = ticketNo;
         this.passangerName = passangerName;

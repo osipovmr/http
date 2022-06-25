@@ -1,6 +1,7 @@
 import static spark.Spark.*;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class HelloWorld {
     //закидываем все классы
@@ -66,8 +67,9 @@ public class HelloWorld {
         return check;
     }
 
-    public static void airport() {
+    public static ArrayList airport() {
         try {
+            ArrayList<String> a = new ArrayList<>();
             resultAirport = statement.executeQuery(queryAirport);
             while (resultAirport.next()) {
                 airportInfo.AirportsInfo(resultAirport.getString("airport_code"),
@@ -77,21 +79,24 @@ public class HelloWorld {
                         resultAirport.getString("latitude"),
                         resultAirport.getString("timezone")
                         );
-                airportInfo.add(airportInfo.toString());
+                a.add(airportInfo.toString());
                 String key = resultAirport.getString("airport_code");
                 String value = airportInfo.toString();
                 container.setJedis(key, value);
             }
             System.out.println("База airport собрана!");
+            return a;
         } catch (SQLException e) {
             System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
-    public static void ticket() {
+    public static ArrayList ticket() {
         try {
+            ArrayList<String> a = new ArrayList<>();
             resultTicket = statement.executeQuery(queryTicket);
             while (resultTicket.next()) {
                 ticketInfo.TicketInfo(resultTicket.getString("ticket_no"),
@@ -99,65 +104,56 @@ public class HelloWorld {
                         resultTicket.getString("fare_conditions"),
                         resultTicket.getString("status"),
                         resultTicket.getString("city"));
-                ticketInfo.add(ticketInfo.toString());
+                a.add(ticketInfo.toString());
                 String key = resultTicket.getString("ticket_no");
                 String value = ticketInfo.toString();
                 container.setJedis(key,value);
             }
             System.out.println("База ticket собрана!");
+            return a;
         } catch (SQLException e) {
             System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
-    public static void code() {
+    public static ArrayList code() {
         try {
+            ArrayList<String> a = new ArrayList<>();
             resultCode = statement.executeQuery(queryCode);
             while (resultCode.next()) {
                 codeInfo.CodeInfo(resultCode.getString("airport_code"),
                         resultCode.getString("Кол-во вылетевших рейсов"),
                         resultCode.getString("Кол-во вылетевших пассажиров"),
                         resultCode.getString("Средняя стоимость вылета"));
-                codeInfo.add(codeInfo.toString());
+                a.add(codeInfo.toString());
                 String key = resultCode.getString("airport_code");
                 String value = codeInfo.toString();
                 container.setJedis(key,value);
             }
             System.out.println("База code собрана!");
+            return a;
         } catch (SQLException e) {
             System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     public static void main(String[] args) {
         System.out.println(connection());
         System.out.println(container.redisTester());
-        container.setJedis("Privet", "Hello"); //проверка
-        System.out.println(container.getJedis("Privet")); //проверка
-        System.out.println(container.getJedis("NOZ"));
-        System.out.println(container.getJedis("0005432000883"));
-        System.out.println(container.getJedis("TOF"));
         airport();
         ticket();
         code();
 
-        for (int i = 0; i < airportInfo.list.size(); i++) {
-            System.out.println(airportInfo.list.get(i));
-        }
-        for (int i = 0; i < ticketInfo.list.size(); i++) {
-            System.out.println(ticketInfo.list.get(i));
-        }
-        for (int i = 0; i < codeInfo.list.size(); i++) {
-            System.out.println(codeInfo.list.get(i));
-        }
         get("/hello", (req, res) -> check);
-        get("/airport", (req, res) -> airportInfo.getAirports());
-        get("/ticket", (req, res) -> ticketInfo.getTicket());
-        get("/code", (req, res) -> codeInfo.getCode());
+        get("/airport", (req, res) -> airport());
+        get("/ticket", (req, res) -> ticket());
+        get("/code", (req, res) -> code());
     }
 
 }

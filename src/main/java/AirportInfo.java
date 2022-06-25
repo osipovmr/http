@@ -9,13 +9,6 @@ public class AirportInfo {
     public String timezone;
     ArrayList<String> list = new ArrayList<>();
 
-    public void add(String text) {
-        list.add(text);
-    }
-    public ArrayList<String> getAirports() {
-        return list;
-    }
-
     public void AirportsInfo(String airportCode, String airportName, String city, String longitude, String latitude, String timezone) {
         this.airportCode = airportCode;
         this.airportName = airportName;
