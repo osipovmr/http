@@ -1,6 +1,6 @@
 import redis.clients.jedis.Jedis;
 
-public class Container {
+public class ContainerRedis {
     static Jedis jedis = new Jedis("127.0.0.1");
 
     public void setJedis(String x, String y) {

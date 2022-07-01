@@ -18,8 +18,6 @@ public class DataSourse {
         ds = new HikariDataSource( config );
     }
 
-  //  private DataSource() {}
-
     public static Connection getConnection() throws SQLException {
         return ds.getConnection();
     }
