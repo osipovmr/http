@@ -21,7 +21,7 @@ public class AirportInfo {
                 "airportCode = '" + airportCode + '\'' +
                 ", flightsOut = '" + flightsOut + '\'' +
                 ", passengersOut = '" + passengersOut + '\'' +
-                ", averagePrice = '" + averagePrice + '\'' + '}' + "<br>";
+                ", averagePrice = '" + averagePrice + '\'' + '}';
 
     }
 }

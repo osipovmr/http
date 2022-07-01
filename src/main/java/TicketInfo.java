@@ -21,7 +21,7 @@ public class TicketInfo {
                 ", airportName = '" + passangerName + '\'' +
                 ", fareConditions = '" + fareConditions + '\'' +
                 ", status = '" + status + '\'' +
-                ", city = '" + city + '\'' + '}' + "<br>";
+                ", city = '" + city + '\'' + '}';
 
     }
 }

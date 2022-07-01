@@ -74,8 +74,8 @@ public class PostgresData {
                     resultTicket.getString("city"));
             String key = resultTicket.getString("ticket_no");
             String value = ticketInfo.toString();
-            container.setJedis(key, value);}
-            return ticketInfo.toString();
+            container.setJedis(key, value);
+            return ticketInfo.toString();}
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -92,8 +92,8 @@ public class PostgresData {
                     resultAirport.getString("—редн€€ стоимость вылета"));
             String key = resultAirport.getString("airport_code");
             String value = airportInfo.toString();
-            container.setJedis(key, value);}
-            return airportInfo.toString();
+            container.setJedis(key, value);
+            return airportInfo.toString();}
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
