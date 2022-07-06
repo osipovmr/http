@@ -1,7 +1,16 @@
 import java.sql.*;
 
 public class PostgresData {
-    public static Connection conn;
+
+    static Connection conn;
+
+    {
+        try {
+            conn = DataSourse.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static String ticket(String ticketNo) {
         //1. для конкретного номера билета (ticket_no) узнать имя пассажира, тариф, статус, город вылета.
