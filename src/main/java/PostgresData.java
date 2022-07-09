@@ -1,16 +1,35 @@
 import java.sql.*;
 
 public class PostgresData {
-
+    static Statement statement;
     static Connection conn;
 
-    {
+    static {
         try {
             conn = DataSourse.getConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    public static String connection() {
+        String check;
+        try {
+            if (conn != null) {
+                statement = conn.createStatement();
+                check = "Connected to the database!";
+            } else {
+                check = "Failed to make connection!";
+            }
+        } catch (SQLException e) {
+            check = String.valueOf(System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            check = "Ошибка SQL!";
+        }
+        return check;
+    }
+
 
     public static String ticket(String ticketNo) {
         //1. для конкретного номера билета (ticket_no) узнать имя пассажира, тариф, статус, город вылета.
@@ -21,12 +40,11 @@ public class PostgresData {
                 inner join bookings.ticket_flights on bookings.tickets.ticket_no = bookings.ticket_flights.ticket_no
                 inner join bookings.flights on bookings.ticket_flights.flight_id = bookings.flights.flight_id
                 inner join bookings.airports on bookings.flights.departure_airport = bookings.airports.airport_code
-                where tickets.ticket_no = ?
-                """;
+                where tickets.ticket_no = ?""";
         ResultSet resultTicket;
         ContainerRedis container = new ContainerRedis();
+        TicketInfo ticketInfo = new TicketInfo();
         try {
-            TicketInfo ticketInfo = new TicketInfo();
             PreparedStatement preparedStatement = conn.prepareStatement(queryTicket);
             preparedStatement.setString(1, ticketNo);
             resultTicket = preparedStatement.executeQuery();
@@ -48,6 +66,9 @@ public class PostgresData {
     }
 
     public static String airport(String code) {
+        ResultSet resultAirport;
+        ContainerRedis container = new ContainerRedis();
+        AirportInfo airportInfo = new AirportInfo();
         //2. для конкретного кода аэропорта (airport_code) узнать количество вылетов из этого аэропорта,
         // среднюю стоимость перелета из этого аэропорта, количество пассажиров, вылетевших из аэропорта
         String queryCode = """
@@ -69,11 +90,8 @@ public class PostgresData {
                 order by airport_code
                 """;
         try {
-            ResultSet resultAirport;
-            ContainerRedis container = new ContainerRedis();
             PreparedStatement preparedStatement = conn.prepareStatement(queryCode);
             preparedStatement.setString(1, code);
-            AirportInfo airportInfo = new AirportInfo();
             resultAirport = preparedStatement.executeQuery();
             if (resultAirport.next()) {
                 airportInfo.SourseCheck(resultAirport.getString("airport_code"),
