@@ -16,12 +16,21 @@ public class Main {
             String ticketNo;
             String param = request.queryParams("no");
             ticketNo = param;
-            return PostgresData.ticket(ticketNo);});
+            if (container.getJedis(param) != null) {
+                System.out.println("Данные из redis");
+                return container.getJedis(param);
+            } else {
+                System.out.println("Данные внешней базы");
+            return PostgresData.ticket(ticketNo);}});
 
         get("/airport", (request, response) -> {
             String code;
             String param = request.queryParams("code");
             code = param;
-            return PostgresData.airport(code);});
-    }
-}
+            if (container.getJedis(param) != null) {
+                System.out.println("Данные из redis");
+                return container.getJedis(param);
+            } else {
+                System.out.println("Данные из внешней базы");
+                return PostgresData.airport(code);}});}}
+
