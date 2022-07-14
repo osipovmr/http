@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.sql.*;
 
 public class PostgresData {
@@ -55,12 +56,15 @@ public class PostgresData {
                         resultTicket.getString("status"),
                         resultTicket.getString("city"));
                 String key = resultTicket.getString("ticket_no");
-                String value = ticketInfo.toString();
+                String value = ticketInfo.writeJson();
                 container.setJedis(key, value);
-                return ticketInfo.toString();
+                return ticketInfo.writeJson();
+             //   return ticketInfo.toString();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -99,12 +103,15 @@ public class PostgresData {
                         resultAirport.getString("Кол-во вылетевших пассажиров"),
                         resultAirport.getString("Средняя стоимость вылета"));
                 String key = resultAirport.getString("airport_code");
-                String value = airportInfo.toString();
+                String value = airportInfo.writeJson();
                 container.setJedis(key, value);
-                return airportInfo.toString();
+             //   return airportInfo.toString();
+                return airportInfo.writeJson();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
     }

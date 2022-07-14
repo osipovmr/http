@@ -1,4 +1,8 @@
-import java.util.ArrayList;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+
+import java.io.IOException;
 
 public class AirportInfo {
 
@@ -15,6 +19,17 @@ public class AirportInfo {
         this.averagePrice = averagePrice;
     }
 
+    public String writeJson() throws IOException {
+        JsonObject rootObject = new JsonObject();
+        rootObject.addProperty("airportCode", airportCode);
+        rootObject.addProperty("flightsOut", flightsOut);
+        rootObject.addProperty("passengersOut", passengersOut);
+        rootObject.addProperty("averagePrice", averagePrice);
+        Gson gson = new Gson();
+        String json = gson.toJson(rootObject);
+        return json;
+    }
+/*
     @Override
     public String toString() {
         return "AirportInfo{" +
@@ -24,4 +39,6 @@ public class AirportInfo {
                 ", averagePrice = '" + averagePrice + '\'' + '}';
 
     }
+
+ */
 }
