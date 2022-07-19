@@ -1,3 +1,5 @@
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.sql.*;
 
@@ -33,8 +35,6 @@ public class PostgresData {
 
 
     public static String ticket(String ticketNo) {
-        //1. для конкретного номера билета (ticket_no) узнать имя пассажира, тариф, статус, город вылета.
-        //= "'0005432000860'";
         String queryTicket = """
                 select tickets.ticket_no,passenger_name, fare_conditions, status, city
                 from bookings.tickets
@@ -44,27 +44,26 @@ public class PostgresData {
                 where tickets.ticket_no = ?""";
         ResultSet resultTicket;
         ContainerRedis container = new ContainerRedis();
-        TicketInfo ticketInfo = new TicketInfo();
+
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(queryTicket);
             preparedStatement.setString(1, ticketNo);
             resultTicket = preparedStatement.executeQuery();
             if (resultTicket.next()) {
-                ticketInfo.SourseCheck(resultTicket.getString("ticket_no"),
+                TicketInfo ticketInfo = new TicketInfo(resultTicket.getString("ticket_no"),
                         resultTicket.getString("passenger_name"),
                         resultTicket.getString("fare_conditions"),
                         resultTicket.getString("status"),
                         resultTicket.getString("city"));
+                Gson gson = new Gson();
+                String ticketInfoJson = gson.toJson(ticketInfo);
                 String key = resultTicket.getString("ticket_no");
-                String value = ticketInfo.writeJson();
+                String value = ticketInfoJson;
                 container.setJedis(key, value);
-                return ticketInfo.writeJson();
-             //   return ticketInfo.toString();
+                return ticketInfoJson;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return null;
     }
@@ -72,9 +71,6 @@ public class PostgresData {
     public static String airport(String code) {
         ResultSet resultAirport;
         ContainerRedis container = new ContainerRedis();
-        AirportInfo airportInfo = new AirportInfo();
-        //2. для конкретного кода аэропорта (airport_code) узнать количество вылетов из этого аэропорта,
-        // среднюю стоимость перелета из этого аэропорта, количество пассажиров, вылетевших из аэропорта
         String queryCode = """
                 select airport_code,
                 count (\"Вылетевший рейс\") as \"Кол-во вылетевших рейсов\",
@@ -98,20 +94,19 @@ public class PostgresData {
             preparedStatement.setString(1, code);
             resultAirport = preparedStatement.executeQuery();
             if (resultAirport.next()) {
-                airportInfo.SourseCheck(resultAirport.getString("airport_code"),
+                AirportInfo airportInfo = new AirportInfo(resultAirport.getString("airport_code"),
                         resultAirport.getString("Кол-во вылетевших рейсов"),
                         resultAirport.getString("Кол-во вылетевших пассажиров"),
                         resultAirport.getString("Средняя стоимость вылета"));
+                Gson gson = new Gson();
+                String airportInfoJson = gson.toJson(airportInfo);
                 String key = resultAirport.getString("airport_code");
-                String value = airportInfo.writeJson();
+                String value = airportInfoJson;
                 container.setJedis(key, value);
-             //   return airportInfo.toString();
-                return airportInfo.writeJson();
+                return airportInfoJson;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return null;
     }
