@@ -1,15 +1,17 @@
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.SQLException;
 
 import static spark.Spark.*;
 
 public class Main {
-
+    static Logger logger = LoggerFactory.getLogger(Main.class);
     public static ContainerRedis container = new ContainerRedis();
 
     public static void main(String[] args) throws SQLException {
-        System.out.println(DataSourse.getConnection());
-        System.out.println(PostgresData.connection());
-        System.out.println(container.redisTester());
+        logger.info("Логгер работает!)");
+
 
         get("/hello", (req, res) -> DataSourse.getConnection());
         get("/ticket", (request, response) -> {
@@ -17,11 +19,13 @@ public class Main {
             String param = request.queryParams("no");
             ticketNo = param;
             if (container.getJedis(param) != null) {
-                System.out.println("Данные из redis");
+                logger.info("Данные из redis");
                 return container.getJedis(param);
             } else {
-                System.out.println("Данные внешней базы");
-            return PostgresData.ticket(ticketNo);}});
+                logger.info("Данные внешней базы");
+                return PostgresData.ticket(ticketNo);
+            }
+        });
 
         get("/airport", (request, response) -> {
             String code;
@@ -32,5 +36,9 @@ public class Main {
                 return container.getJedis(param);
             } else {
                 System.out.println("Данные из внешней базы");
-                return PostgresData.airport(code);}});}}
+                return PostgresData.airport(code);
+            }
+        });
+    }
+}
 

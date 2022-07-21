@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.sql.*;
 
 public class PostgresData {
-    static Statement statement;
+
     static Connection conn;
 
     static {
@@ -13,24 +13,6 @@ public class PostgresData {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public static String connection() {
-        String check;
-        try {
-            if (conn != null) {
-                statement = conn.createStatement();
-                check = "Connected to the database!";
-            } else {
-                check = "Failed to make connection!";
-            }
-        } catch (SQLException e) {
-            check = String.valueOf(System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage()));
-        } catch (Exception e) {
-            e.printStackTrace();
-            check = "Ошибка SQL!";
-        }
-        return check;
     }
 
 
